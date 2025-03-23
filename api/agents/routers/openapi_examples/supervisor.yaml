@@ -2,54 +2,60 @@
 case 1:
   summary: ask for latest info (web search)
   value:
-    state: { }
+    state: [ ]
     messages:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
         content: What is the current status of the planning application on New Brent Street?
+    agent_workflow: [ ]
 case 2:
   summary: ask for detail (RAG + web search)
   value:
-    state: { }
+    state: [ ]
     messages:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
         content: What details are available about the planning application on New Brent Street?
+    agent_workflow: [ ]
 case 3a:
   summary: ask for document details (simple RAG)
   value:
-    state: { }
+    state: [ ]
     messages:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
         content: What amenities are included at 99 City Road?
+    agent_workflow: [ ]
 case 3b:
   summary: ask for document details (simple RAG + cal tool)
   value:
-    state: { }
+    state: [ ]
     messages:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
         content: What is the total proposed Gross Internal Area (GIA) for 99 Bishopsgate?
+    agent_workflow: [ ]
 case 4:
   summary: document comparison (complex RAG + cal tool)
   value:
-    state: { }
+    state: [ ]
     messages:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
         content: What is the total proposed Gross Internal Area (GIA) for 99 Bishopsgate?
+    agent_workflow: [ ]
 case 5:
   summary: database query (db query tool)
   value:
-    state: { }
+    state: [ ]
     messages:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
         content: How many planning applications have been approved in the London Borough of Barnet?
+    agent_workflow: [ ]

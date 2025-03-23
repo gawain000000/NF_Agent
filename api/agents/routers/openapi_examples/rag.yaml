@@ -37,5 +37,5 @@ case 3:
       - role: system
         content: You are AI assistant response for answering the question of planning application in London
       - role: user
-        content: What is the total proposed Gross Internal Area (GIA) for 99 Bishopsgate?
+        content: How does the proposed GIA of 99 Bishopsgate compare to that of 70 Gracechurch Street?
     agent_workflow: [ "supervisor" ]

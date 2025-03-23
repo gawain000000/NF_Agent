@@ -1,0 +1,25 @@
+---
+case 1:
+  summary: database query (db query tool)
+  value:
+    state: [ {
+      "agent": "supervisor",
+      "output": {
+        "rag": {
+          "execute": false,
+          "search_document": [ ]
+        },
+        "web_search": {
+          "execute": true,
+          "query": "current status of planning application on New Brent Street London"
+        },
+        "db_query": {
+          "execute": true
+        }
+      }} ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: How many planning applications have been approved in the London Borough of Barnet?
+    agent_workflow: [ ]

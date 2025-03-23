@@ -5,8 +5,8 @@ import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from openai import AsyncOpenAI
 
-from services.utils import update_system_prompt, restrict_to_json_format
-from core.config import chat_llm_settings, embedding_model_settings, agent_settings, milvus_settings
+from NF_Agent.services.utils import update_system_prompt, restrict_to_json_format
+from NF_Agent.core.config import chat_llm_settings, embedding_model_settings, agent_settings, milvus_settings
 
 mongodb_client = AsyncIOMotorClient(agent_settings.MONGODB_URI)
 db = mongodb_client[agent_settings.MONGODB_DB_NAME]
@@ -20,11 +20,30 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 with open(os.path.join(parent_dir,
                        "api/agents/routers/prompts/planning_application_status/parameters_identification.txt")) as f:
-    system_prompt = f.read()
+    parameters_identification_prompt = f.read()
+
+with open(os.path.join(parent_dir,
+                       "api/agents/routers/prompts/planning_application_status/answer_user_query.txt")) as f:
+    answer_user_query_prompt = f.read()
+
+
+async def answer_user_query(user_query, query_result):
+    task_prompt = answer_user_query_prompt.format(querying_result=query_result,
+                                                  user_query=user_query
+                                                  )
+    task_messages = [{"role": "user", "content": task_prompt}]
+    response = await chat_llm_client.chat.completions.create(model=chat_llm_settings.CHAT_LLM_MODEL,
+                                                             messages=task_messages,
+                                                             stream=False,
+                                                             temperature=chat_llm_settings.temperature,
+                                                             top_p=chat_llm_settings.top_p
+                                                             )
+    response = response.choices[0].message.content
+    return response
 
 
 async def parameters_identification(messages):
-    task_messages = update_system_prompt(messages=messages, system_prompt=system_prompt)
+    task_messages = update_system_prompt(messages=messages, system_prompt=parameters_identification_prompt)
     response = await chat_llm_client.chat.completions.create(model=chat_llm_settings.CHAT_LLM_MODEL,
                                                              messages=task_messages,
                                                              stream=False,
@@ -56,12 +75,19 @@ async def planning_application_status_checking(messages):
 
     else:
         res = {"borough": borough, "valid": False}
-    return res
+
+    final_res = await answer_user_query(user_query=messages[-1]["content"], query_result=res)
+
+    return final_res
 
 
 if __name__ == '__main__':
+    # messages = [
+    #     {"role": "user",
+    #      "content": "How many planning applications have been approved in the London Borough of Barnet?"},
+    # ]
     messages = [
         {"role": "user",
-         "content": "How many planning applications have been approved in the London Borough of Barnet?"},
+         "content": "How many planning applications have been approved in the Hong Kong?"},
     ]
     asyncio.run(planning_application_status_checking(messages=messages))

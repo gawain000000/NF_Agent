@@ -8,7 +8,9 @@ load_dotenv()  # Ensure environment variables are loaded if you're using a .env 
 class AgentSettings(BaseSettings):
     PROJECT_NAME: str = "NF Planing Agent"
     VERSION: str = "0.1.0"
-    API_PREFIX: str = "/api/v1/"
+    API_PREFIX: str = "/api/v1"
+    HOST: str = "0.0.0.0"
+    PORT: int = 20009
 
     # Tavily
     TAVILY_TOKEN: str = os.environ.get("TAVILY_TOKEN")
@@ -62,6 +64,16 @@ class MilvusSettings(AgentSettings):
                           "graph_degree": 32
                           }
     similarity_top_k: int = 5
+
+
+class PathSpec:
+    SUPERVISOR: str = "/agent/supervisor"
+
+    RAG: str = "/agent/rag"
+    WEB_SEARCH: str = "/agent/web_search"
+    DB_QUERY: str = "/agent/db_query"
+
+    AGENTS_EXECUTION: str = "/agent/agents_execution"
 
 
 # Instantiate settings to be imported in other modules

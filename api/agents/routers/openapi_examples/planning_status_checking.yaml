@@ -1,0 +1,21 @@
+---
+case 1:
+  summary: database query (db query tool)
+  value:
+    state: [ ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: How many planning applications have been approved in the London Borough of Barnet?
+    agent_workflow: [ "supervisor" ]
+case 2:
+  summary: database query invalid(db query tool)
+  value:
+    state: [ ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: How many planning applications have been approved in the Hong Kong?
+    agent_workflow: [ "supervisor" ]

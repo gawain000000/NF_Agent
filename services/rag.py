@@ -74,11 +74,14 @@ chat_llm_client = AsyncOpenAI(base_url=chat_llm_settings.CHAT_LLM_BASE_URL,
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 with open(os.path.join(parent_dir, "api/agents/routers/prompts/rag/user_query_expansion.txt")) as f:
-    system_prompt = f.read()
+    user_query_expansion_prompt = f.read()
+
+with open(os.path.join(parent_dir, "api/agents/routers/prompts/rag/summarize_rag.txt")) as f:
+    summarization_prompt = f.read()
 
 
 async def expand_user_query(messages):
-    task_messages = update_system_prompt(messages=messages, system_prompt=system_prompt)
+    task_messages = update_system_prompt(messages=messages, system_prompt=user_query_expansion_prompt)
     response = await chat_llm_client.chat.completions.create(model=chat_llm_settings.CHAT_LLM_MODEL,
                                                              messages=task_messages,
                                                              stream=False,
@@ -97,6 +100,21 @@ async def expand_user_query(messages):
     return result
 
 
+async def summarize_rag_result(rag_result, expanded_user_query):
+    task_prompt = summarization_prompt.format(retrieval_result=str(rag_result),
+                                              user_query=expanded_user_query,
+                                              )
+    task_messages = [{"role": "user", "content": task_prompt}]
+    response = await chat_llm_client.chat.completions.create(model=chat_llm_settings.CHAT_LLM_MODEL,
+                                                             messages=task_messages,
+                                                             stream=False,
+                                                             temperature=chat_llm_settings.temperature,
+                                                             top_p=chat_llm_settings.top_p
+                                                             )
+    result = response.choices[0].message.content
+    return result
+
+
 async def retrieval_milvus_BM25(messages):
     expanded_user_query = await expand_user_query(messages)
     expanded_user_query = expanded_user_query["expanded_user_query"]
@@ -108,7 +126,8 @@ async def retrieval_milvus_BM25(messages):
     reranked_retrieval_results = ranker.postprocess_nodes(retrieved_results, query_str=expanded_user_query)
     # Process reranked results
     retrieved_text = [item.get_content() for item in reranked_retrieval_results]
-    return retrieved_text
+    retrieval_result = await summarize_rag_result(rag_result=retrieved_text, expanded_user_query=expanded_user_query)
+    return retrieval_result
 
 
 if __name__ == '__main__':

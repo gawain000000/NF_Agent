@@ -19,7 +19,7 @@ The available documents are:
 
 **Output format:**
 {
-  "retrieval": <true|false>,
+  "execute": <true|false>,
   "search_document": ["doc_1", "doc_2"]
 }
 
