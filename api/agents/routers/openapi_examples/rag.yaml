@@ -1,0 +1,41 @@
+---
+case 1:
+  summary: ask for detail (RAG + web search)
+  value:
+    state: [ ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: What details are available about the planning application on New Brent Street?
+    agent_workflow: [ "supervisor" ]
+case 2a:
+  summary: ask for document details (simple RAG)
+  value:
+    state: [ ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: What amenities are included at 99 City Road?
+    agent_workflow: [ "supervisor" ]
+case 2b:
+  summary: ask for document details (simple RAG + cal tool)
+  value:
+    state: [ ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: What is the total proposed Gross Internal Area (GIA) for 99 Bishopsgate?
+    agent_workflow: [ "supervisor" ]
+case 3:
+  summary: document comparison (complex RAG + cal tool)
+  value:
+    state: [ ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: What is the total proposed Gross Internal Area (GIA) for 99 Bishopsgate?
+    agent_workflow: [ "supervisor" ]

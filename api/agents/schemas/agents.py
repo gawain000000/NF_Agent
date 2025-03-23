@@ -8,6 +8,6 @@ class Message(BaseModel):
 
 
 class NodeState(BaseModel):
-    state: Dict[str, Any]
+    state: List[Dict[str, Any]]
     messages: List[Message]
     agent_workflow: List[str]

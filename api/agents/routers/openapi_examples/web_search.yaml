@@ -1,0 +1,11 @@
+---
+case 1:
+  summary: ask for latest info (web search)
+  value:
+    state: []
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: What is the current status of the planning application on New Brent Street?
+    agent_workflow: [ "supervisor" ]

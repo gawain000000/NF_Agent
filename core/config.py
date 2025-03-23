@@ -13,6 +13,11 @@ class AgentSettings(BaseSettings):
     # Tavily
     TAVILY_TOKEN: str = os.environ.get("TAVILY_TOKEN")
 
+    # MongoDB
+    MONGODB_URI: str = os.environ.get("MONGODB_URI")
+    MONGODB_DB_NAME: str = os.environ.get("MONGODB_DB_NAME")
+    MONGODB_COLL_NAME: str = os.environ.get("MONGODB_COLL_NAME")
+
     # Milvus
     MILVUS_URI: str = os.environ.get("MILVUS_URI")
     MILVUS_DB_NAME: str = os.environ.get("MILVUS_DB_NAME")
@@ -53,9 +58,9 @@ class MilvusSettings(AgentSettings):
     embedding_field: str = "doc_embedding"
     similarity_metric: str = "L2"
     index_config: dict = {"index_type": "GPU_CAGRA",
-                         "intermediate_graph_degree": 64,
-                         "graph_degree": 32
-                         }
+                          "intermediate_graph_degree": 64,
+                          "graph_degree": 32
+                          }
     similarity_top_k: int = 5
 
 

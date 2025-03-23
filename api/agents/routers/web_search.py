@@ -1,24 +1,44 @@
-from tavily import TavilyClient
-from core.config import agent_settings
+import os
+from typing import Annotated
+import logging
 
-search_query = "What is the current status of the planning application on New Brent Street?"
+from fastapi import APIRouter, Body
 
-tavily_client = TavilyClient(api_key=agent_settings.TAVILY_TOKEN)
+from NF_Agent.api.agents.schemas.agents import NodeState
+from NF_Agent.api.agents.routers.utils import load_openapi_examples
+from NF_Agent.services.web_search import web_search
 
-qna_search_result = tavily_client.qna_search(query=search_query,
-                                             search_depth="advanced",
-                                             max_results=5
-                                             )
+router = APIRouter()
+logging.basicConfig(level=logging.INFO)
 
-search_result = tavily_client.search(query=search_query,
-                                     search_depth="advanced",
-                                     max_results=5,
-                                     include_answers=True,
-                                     include_raw_content=True
-                                     )
 
-print(search_result["answer"])
-print(search_result["results"][0]["content"])
+class PathSpec:
+    SUPERVISOR: str = "/agent/web_search"
 
-print("=" * 100)
-print(qna_search_result)
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+openapi_examples = load_openapi_examples(os.path.join(script_dir, "openapi_examples/web_search.yaml"))
+
+
+@router.post(PathSpec.SUPERVISOR)
+async def web_search_agent(
+        request_body: Annotated[NodeState, Body(openapi_examples=openapi_examples)],
+):
+    state = request_body.state
+    messages = request_body.messages
+    agent_workflow = request_body.agent_workflow
+
+    messages = [{"role": f"{msg.role}", "content": f"{msg.content}"} for msg in messages]
+    web_search_result = await web_search(messages)
+    agent_workflow.append("web_search_result")
+    agent_result = {"agent": "web_search", "output": web_search_result}
+    state.append(agent_result)
+    node_state = NodeState(state=state,
+                           messages=messages,
+                           agent_workflow=agent_workflow
+                           )
+    return node_state
+
+
+if __name__ == '__main__':
+    print(openapi_examples)

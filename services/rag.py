@@ -6,6 +6,7 @@ from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List, Dict, Any, Annotated, Optional
+import nest_asyncio
 
 from openai import AsyncOpenAI
 from llama_index.core import VectorStoreIndex, Settings, ChatPromptTemplate
@@ -16,10 +17,9 @@ from llama_index.llms.openai_like import OpenAILike
 from llama_index.retrievers.bm25 import BM25Retriever
 from llama_index.core.retrievers import QueryFusionRetriever
 from llama_index.core.postprocessor.llm_rerank import LLMRerank
-import nest_asyncio
 
-from services.utils import update_system_prompt, restrict_to_json_format
-from core.config import chat_llm_settings, embedding_model_settings, agent_settings, milvus_settings
+from NF_Agent.services.utils import update_system_prompt, restrict_to_json_format
+from NF_Agent.core.config import chat_llm_settings, embedding_model_settings, agent_settings, milvus_settings
 
 nest_asyncio.apply()
 chat_llm = OpenAILike(api_base=chat_llm_settings.CHAT_LLM_BASE_URL,
