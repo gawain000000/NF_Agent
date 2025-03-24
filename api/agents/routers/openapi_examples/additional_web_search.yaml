@@ -1,0 +1,33 @@
+---
+case 1:
+  summary: need additional web search
+  value:
+    state: [ { "agent": "agent_execution",
+               "output": [
+                 {
+                   "agent": "db_query",
+                   "output": "No data"
+                 }
+               ] } ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: How many planning applications have been approved in the London Borough of Barnet?
+    agent_workflow: [ ]
+case 2:
+  summary: no need additional web search
+  value:
+    state: [ { "agent": "agent_execution",
+               "output": [
+                 {
+                   "agent": "db_query",
+                   "output": "In the London Borough of Barnet, there have been 63 approved planning applications."
+                 }
+               ] } ]
+    messages:
+      - role: system
+        content: You are AI assistant response for answering the question of planning application in London
+      - role: user
+        content: How many planning applications have been approved in the London Borough of Barnet?
+    agent_workflow: [ ]

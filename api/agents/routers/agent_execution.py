@@ -34,7 +34,7 @@ async def agents_execution(
     )
     result = await execute_agents(execution_decision=execution_decision, node_state=temp_node_state)
     agent_workflow.append("agents_execution")
-    agent_execution_result = {"agent": "supervisor", "output": result}
+    agent_execution_result = {"agent": "agents_execution", "output": result}
     state.append(agent_execution_result)
     node_state = NodeState(state=state,
                            messages=messages,

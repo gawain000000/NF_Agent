@@ -75,6 +75,8 @@ class PathSpec:
 
     AGENTS_EXECUTION: str = "/agent/agents_execution"
 
+    ADDITIONAL_WEB_SEARCH: str = "/agent/additional_web_search"
+
 
 # Instantiate settings to be imported in other modules
 agent_settings = AgentSettings()
