@@ -10,7 +10,7 @@ class AgentSettings(BaseSettings):
     VERSION: str = "0.1.0"
     API_PREFIX: str = "/api/v1"
     HOST: str = "0.0.0.0"
-    PORT: int = 20009
+    PORT: int = 19000
 
     # Tavily
     TAVILY_TOKEN: str = os.environ.get("TAVILY_TOKEN")
@@ -77,7 +77,7 @@ class PathSpec:
 
     ADDITIONAL_WEB_SEARCH: str = "/agent/additional_web_search"
 
-    NF_AGENT: str = "/agent/nf_agent"
+    NF_AGENT: str = "/agent/nf_agent/chat/completions"
 
 
 # Instantiate settings to be imported in other modules

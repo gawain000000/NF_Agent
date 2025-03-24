@@ -44,10 +44,6 @@ async def nf_agent_generation(
     stream = request_body.stream
 
     messages = [{"role": msg.role, "content": msg.content} for msg in messages]
-    # graph_state = {"state": {},
-    #                "messages": messages,
-    #                "agent_workflow": []
-    #                }
     graph_state = NodeState(state=[],
                             messages=messages,
                             agent_workflow=[]
