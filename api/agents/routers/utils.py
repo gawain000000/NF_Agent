@@ -1,6 +1,6 @@
 import importlib.resources
 import json
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, AsyncGenerator
 
 import yaml
 
@@ -49,3 +49,17 @@ def load_openapi_examples(target: str) -> dict[str, Any]:
             return loader(handle.read())
 
     raise FileNotFoundError(f"Cannot locate: {target!r}")
+
+
+async def async_stream_generator(response) -> AsyncGenerator[str, None]:
+    """
+    Asynchronously yield the generator output from the response.
+
+    Args:
+    response: The response object containing the streaming data.
+
+    Yields:
+    str: The chunks of data as they are received.
+    """
+    async for chunk in response:
+        yield chunk.json()

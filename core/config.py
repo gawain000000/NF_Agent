@@ -77,6 +77,8 @@ class PathSpec:
 
     ADDITIONAL_WEB_SEARCH: str = "/agent/additional_web_search"
 
+    NF_AGENT: str = "/agent/nf_agent"
+
 
 # Instantiate settings to be imported in other modules
 agent_settings = AgentSettings()

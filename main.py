@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
 
-from NF_Agent.api.agents.routers import supervisor, web_search, rag, planning_application_status, agent_execution, \
-    additional_web_search
+from NF_Agent.api.agents.routers import (
+    supervisor, web_search, rag, planning_application_status, agent_execution, \
+    additional_web_search, NF_agent
+)
 from NF_Agent.core.config import agent_settings
 
 app = FastAPI()
@@ -34,6 +36,11 @@ app.include_router(router=additional_web_search.router,
 
 app.include_router(router=agent_execution.router,
                    tags=["agent_execution"],
+                   prefix=agent_settings.API_PREFIX
+                   )
+
+app.include_router(router=NF_agent.router,
+                   tags=["NF_agent"],
                    prefix=agent_settings.API_PREFIX
                    )
 
